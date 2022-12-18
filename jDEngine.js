@@ -339,7 +339,7 @@ class jDEngine{
 		this.ctx.setLineDash([]);
 		this.ctx.stroke();
 	}
-
+	
 	getCollision(CheckBox){
 
 
@@ -404,7 +404,48 @@ class jDEngine{
 
 		return collision;
 	}
+	
+	CheckCollision(box1,box2){
+		let x=box1.p.x;
+		let y=box1.p.y;
+		let w=box1.p.w;
+		let h=box1.p.h;
+		let bx=box2.p.x;
+		let by=box2.p.y;
+		let bw=box2.p.w;
+		let bh=box2.p.h;
+		let MX=x+w;
+		let MY=y+h;
+		let bMX=bx+bw;
+		let bMY=by+bh;
+		let veryial=false;
+		let horizontal=false;
+		
+		if(bx <= x && bMX >= x){
+			horizontal=true;
+		}
 
+		if(bx <= MX && bMX >= MX){
+			horizontal=true;
+		}
+
+		if(by <= y && bMY >= y){
+			veryial=true;
+
+		}
+		if(by <= MY && bMY >= MY){
+			veryial=true;
+		}
+		
+		if(horizontal && veryial){
+			return true;
+		}
+		return false;
+	}
+	
+	Padding(top=0,left=0,bottom=0,right=0){
+		
+	}
 
 	Audio(File){
 		let audio = new Audio();
@@ -415,6 +456,13 @@ class jDEngine{
 			audio,
 			Play(){
 				audio.play();
+			},
+			Stop(){
+				audio.pause();
+				audio.currentTime=0;
+			},
+			Pause(){
+				audio.pause();
 			},
 			Volume(value=0.05){
 				audio.volume=value;
