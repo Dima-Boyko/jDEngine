@@ -1,7 +1,7 @@
 /*
 Autor: Boyko Dmytro
 Data: 08.11.2022
-Version: 0.3
+Version: 0.5
 */
 
 class jDEngine{
@@ -22,6 +22,7 @@ class jDEngine{
 		this.Loops=[];
 		this.ListObject=[];
 		this.canvas_selector="";
+		this.LastWall={};
 		this.ListCollision=[];
 		this.World={
 			center: false,
@@ -30,6 +31,7 @@ class jDEngine{
 		};
 		this.KeyControl=new jDEngineKeyControl();
 		this.CursorControl=new jDEngineCursorControl();
+		this.fn=new jDEngineFunctions();
 
 		
 	}
@@ -405,6 +407,59 @@ class jDEngine{
 		return collision;
 	}
 	
+	IsWall(box,direction='',duplex=true){
+		let wall=false;
+		let result={};
+		let pBox;
+		if(direction=='top')pBox=this.fn.PaddingTop(box,speed);
+		if(direction=='bottom')pBox=this.fn.PaddingBottom(box,speed);
+		if(direction=='left')pBox=this.fn.PaddingLeft(box,speed);
+		if(direction=='right')pBox=this.fn.PaddingRight(box,speed);
+		for(let i in this.ListCollision){
+	      wall = this.fn.CheckCollision(pBox,this.ListCollision[i]);
+	      if(duplex && !wall){
+	      	wall = this.fn.CheckCollision(this.ListCollision[i],pBox);
+	      }
+	      if(wall){
+	      	this.LastWall=this.ListCollision[i];
+	      	break;
+	      }
+	    }
+
+	    return wall;
+	}
+
+	Audio(File){
+		let audio = new Audio();
+		audio.src=File;
+		audio.volume=0.05;
+
+		return {
+			audio,
+			Play(){
+				audio.play();
+			},
+			Stop(){
+				audio.pause();
+				audio.currentTime=0;
+			},
+			Pause(){
+				audio.pause();
+			},
+			Volume(value=0.05){
+				audio.volume=value;
+			}
+		};
+	}
+
+
+}
+
+class jDEngineFunctions{
+	constructor(){
+
+	}
+
 	CheckCollision(box1,box2){
 		let x=box1.p.x;
 		let y=box1.p.y;
@@ -442,37 +497,39 @@ class jDEngine{
 		}
 		return false;
 	}
-	
-	Padding(top=0,left=0,bottom=0,right=0){
-		
-	}
 
-	Audio(File){
-		let audio = new Audio();
-		audio.src=File;
-		audio.volume=0.05;
-
-		return {
-			audio,
-			Play(){
-				audio.play();
-			},
-			Stop(){
-				audio.pause();
-				audio.currentTime=0;
-			},
-			Pause(){
-				audio.pause();
-			},
-			Volume(value=0.05){
-				audio.volume=value;
+	CopyBox(box){
+		let obj={
+			p:{
+				x:box.p.x,
+				y:box.p.y,
+				w:box.p.w,
+				h:box.p.h,
 			}
-		};
+		}
+		return obj;
 	}
-
-
+	PaddingTop(box,value=0){
+		let obj=this.CopyBox(box);
+		obj.p.y-=value;
+		return obj;
+	}
+	PaddingLeft(box,value=0){
+		let obj=this.CopyBox(box);
+		obj.p.x-=value;
+		return obj;
+	}
+	PaddingRight(box,value=0){
+		let obj=this.CopyBox(box);
+		obj.p.w+=value;
+		return obj;
+	}
+	PaddingBottom(box,value=0){
+		let obj=this.CopyBox(box);
+		obj.p.h+=value;
+		return obj;
+	}
 }
-
 class jDEngineCanvas{
 	constructor(width,height){
 		this.canvas=document.createElement('canvas');

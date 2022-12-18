@@ -14,16 +14,7 @@
     src:'texture/pers.png'
   });
 
-  /*let player=jDE.Rect({
-    x:700,
-    y:200,
-    w:50,
-    h:50,
-    fillColor:"green",
-    strokeColor:"green",
-    lineWidth:2,
-    level:100,
-  });*/
+
 
 
   
@@ -43,42 +34,30 @@
 
   jDE.Loop('main',function(){
     
-
-    if(key.IsDown('e') ){
-      player.rotate(0.5);
-
-    }
-    if(key.IsDown('q')){
-      player.rotate(-0.5);
-    }
 	
 	
-    let Collision = jDE.getCollision(player);
-    if(key.IsDown('c')){
-		jDE.ListCollision.forEach(function(box){
-			console.log(jDE.CheckCollision(player,box));
-		});
-    
-    }
+   
+
+
 
     player.direction(cursor.x,cursor.y);
 
     let x=0;
     let y=0;
     
-    if(key.IsDown('a') ){
+    if(key.IsDown('a') && !jDE.IsWall(player,'left')){
       x=speed;
     }
 
-    if(key.IsDown('d') ){
+    if(key.IsDown('d') && !jDE.IsWall(player,'right')){
       x=-speed;
     }
 
-    if(key.IsDown('w')){
+    if(key.IsDown('w') && !jDE.IsWall(player,'top')){
       y=speed;
     }
 
-    if(key.IsDown('s')){
+    if(key.IsDown('s') && !jDE.IsWall(player,'bottom')){
       y=-speed;
     }
 
