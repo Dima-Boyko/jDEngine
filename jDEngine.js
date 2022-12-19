@@ -23,6 +23,7 @@ class jDEngine{
 		this.ListObject=[];
 		this.canvas_selector="";
 		this.LastWall={};
+		this.isLastWall=false;
 		this.ListCollision=[];
 		this.World={
 			center: false,
@@ -408,6 +409,7 @@ class jDEngine{
 	}
 	
 	IsWall(box,direction='',duplex=true){
+		this.isLastWall=false;
 		let wall=false;
 		let result={};
 		let pBox;
@@ -425,8 +427,18 @@ class jDEngine{
 	      	break;
 	      }
 	    }
+		
 
 	    return wall;
+	}
+
+
+	GetCloserHorizontal(boxRight,boxLeft,retreat=1){
+		return boxRight.p.x - (boxLeft.p.x+boxLeft.p.w)-retreat;
+	}
+	
+	GetCloserVertical(boxTop,boxBottom,retreat=1){
+		return boxBottom.p.y - (boxTop.p.y+boxTop.p.h)-retreat;
 	}
 
 	Audio(File){

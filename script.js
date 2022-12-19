@@ -32,33 +32,45 @@
   });
   
 
-  jDE.Loop('main',function(){
-    
-	
-	
-   
-
-
+  jDE.Loop('main',function(){ 
 
     player.direction(cursor.x,cursor.y);
 
     let x=0;
     let y=0;
     
-    if(key.IsDown('a') && !jDE.IsWall(player,'left')){
-      x=speed;
+    if(key.IsDown('a')){
+  		if(jDE.IsWall(player,'left')){
+  			x=jDE.GetCloserHorizontal(player,jDE.LastWall);
+  		}else{
+  			x=speed; 
+  		}
     }
 
-    if(key.IsDown('d') && !jDE.IsWall(player,'right')){
-      x=-speed;
+    if(key.IsDown('d')){
+  		if(jDE.IsWall(player,'right')){
+  			x=-jDE.GetCloserHorizontal(jDE.LastWall,player);
+  		}else{
+  			x=-speed; 
+  		}
     }
 
-    if(key.IsDown('w') && !jDE.IsWall(player,'top')){
-      y=speed;
+    if(key.IsDown('w')){
+      if(jDE.IsWall(player,'top')){
+        y=jDE.GetCloserVertical(jDE.LastWall,player);
+      }else{
+        y=speed;
+      }
+      
     }
 
-    if(key.IsDown('s') && !jDE.IsWall(player,'bottom')){
-      y=-speed;
+    if(key.IsDown('s')){
+      if(jDE.IsWall(player,'bottom')){
+        y=-jDE.GetCloserVertical(player,jDE.LastWall);
+      }else{
+        y=-speed;
+      }
+      
     }
 
     if(x!=0 || y!=0){
